@@ -31,13 +31,18 @@ import java.util.Properties;
         entityManagerFactoryRef = "entityManagerFactory",
         transactionManagerRef = "transactionManager")
 @EnableTransactionManagement
-@ComponentScan(basePackages = {"ru.borsch.basics.service"})
+@ComponentScan(basePackages = {"ru.borsch.basics.service","ru.borsch.basics.repository","ru.borsch.basics.action"})
 public class JpaConfiguration {
-    @Autowired
+
     private Environment environment;
 
     @Value("${datasource.app.maxPoolSize:10}")
     private int maxPoolSize;
+
+    @Autowired
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
 
     /*
      * Populate SpringBoot DataSourceProperties object directly from application.yml
@@ -73,7 +78,7 @@ public class JpaConfiguration {
      * Entity Manager Factory setup.
      */
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws NamingException {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setDataSource(dataSource());
         factoryBean.setPackagesToScan(new String[] { "ru.borsch.basics.model" });
@@ -87,8 +92,7 @@ public class JpaConfiguration {
      */
     @Bean
     public JpaVendorAdapter jpaVendorAdapter() {
-        HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
-        return hibernateJpaVendorAdapter;
+        return new HibernateJpaVendorAdapter();
     }
 
     /*

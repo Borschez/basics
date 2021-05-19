@@ -1,5 +1,6 @@
 package ru.borsch.basics.service.document;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,14 +9,21 @@ import ru.borsch.basics.model.document.InternalDocument;
 import ru.borsch.basics.repository.document.InternalDocumentRepository;
 
 import javax.transaction.Transactional;
+import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service("internalDocumentService")
 @Transactional
 public class InternalDocumentServiceImpl implements InternalDocumentService {
+
+    private InternalDocumentRepository internalDocumentRepository;
+
     @Autowired
-    InternalDocumentRepository internalDocumentRepository;
+    public void setInternalDocumentRepository(InternalDocumentRepository internalDocumentRepository) {
+        this.internalDocumentRepository = internalDocumentRepository;
+    }
 
     @Override
     public List<InternalDocument> findByExecutor(String executor) {
@@ -60,5 +68,11 @@ public class InternalDocumentServiceImpl implements InternalDocumentService {
     @Override
     public InternalDocument save(InternalDocument entity) {
         return internalDocumentRepository.save(entity);
+    }
+
+    @Override
+    public InternalDocument deserialize(Map<String, Serializable> dataMap) {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.convertValue(dataMap, InternalDocument.class);
     }
 }

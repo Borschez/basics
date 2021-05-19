@@ -1,5 +1,6 @@
 package ru.borsch.basics.service.document;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,14 +9,21 @@ import ru.borsch.basics.model.document.IncomingDocument;
 import ru.borsch.basics.repository.document.IncomingDocumentRepository;
 
 import javax.transaction.Transactional;
+import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service("incomingDocumentService")
 @Transactional
 public class IncomingDocumentServiceImpl implements IncomingDocumentService {
+
+    private IncomingDocumentRepository incomingDocumentRepository;
+
     @Autowired
-    IncomingDocumentRepository incomingDocumentRepository;
+    public void setIncomingDocumentRepository(IncomingDocumentRepository incomingDocumentRepository) {
+        this.incomingDocumentRepository = incomingDocumentRepository;
+    }
 
     @Override
     public List<IncomingDocument> findByAddressee(String addressee) {
@@ -60,5 +68,11 @@ public class IncomingDocumentServiceImpl implements IncomingDocumentService {
     @Override
     public IncomingDocument save(IncomingDocument entity) {
         return incomingDocumentRepository.save(entity);
+    }
+
+    @Override
+    public IncomingDocument deserialize(Map<String, Serializable> dataMap) {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.convertValue(dataMap, IncomingDocument.class);
     }
 }
