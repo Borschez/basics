@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@Service("incomingDocumentService")
+@Service("incomingDocumentEntityService")
 @Transactional
-public class IncomingDocumentServiceImpl implements IncomingDocumentService {
+public class IncomingDocumentEntityServiceImpl implements IncomingDocumentEntityService {
 
     private IncomingDocumentRepository incomingDocumentRepository;
 
@@ -37,7 +37,7 @@ public class IncomingDocumentServiceImpl implements IncomingDocumentService {
 
     @Override
     public String getDocumentTypeCode() {
-        return "incoming";
+        return DocumentService.INCOMING_TYPE_CODE;
     }
 
     @Override

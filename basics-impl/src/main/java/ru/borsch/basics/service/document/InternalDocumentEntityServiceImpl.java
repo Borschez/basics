@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@Service("internalDocumentService")
+@Service("internalDocumentEntityService")
 @Transactional
-public class InternalDocumentServiceImpl implements InternalDocumentService {
+public class InternalDocumentEntityServiceImpl implements InternalDocumentEntityService {
 
     private InternalDocumentRepository internalDocumentRepository;
 
@@ -37,7 +37,7 @@ public class InternalDocumentServiceImpl implements InternalDocumentService {
 
     @Override
     public String getDocumentTypeCode() {
-        return "internal";
+        return DocumentService.INTERNAL_TYPE_CODE;
     }
 
     @Override

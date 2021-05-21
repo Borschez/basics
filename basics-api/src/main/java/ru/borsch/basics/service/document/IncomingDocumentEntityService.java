@@ -4,6 +4,6 @@ import ru.borsch.basics.model.document.IncomingDocument;
 
 import java.util.List;
 
-public interface IncomingDocumentService extends DocumentEntityService<IncomingDocument> {
+public interface IncomingDocumentEntityService extends DocumentEntityService<IncomingDocument> {
     List<IncomingDocument> findByAddressee(String addressee);
 }

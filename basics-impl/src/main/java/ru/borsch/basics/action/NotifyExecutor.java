@@ -4,20 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.borsch.basics.model.action.context.DocumentActionContext;
 import ru.borsch.basics.model.action.ActionContext;
 import ru.borsch.basics.model.action.RequestAction;
 import ru.borsch.basics.model.action.WrappedAction;
 import ru.borsch.basics.model.document.DocumentEntity;
 import ru.borsch.basics.model.document.InternalDocument;
-import ru.borsch.basics.request.decorators.DocumentParameterDecorator;
 import ru.borsch.basics.request.RequestParameter;
-import ru.borsch.basics.request.decorators.TypeParameterDecorator;
-import ru.borsch.basics.service.document.DocumentEntityService;
 import ru.borsch.basics.service.document.DocumentService;
-
-
-import java.io.Serializable;
-import java.util.Map;
 
 @Component
 public class NotifyExecutor extends WrappedAction implements RequestAction {
@@ -39,7 +33,10 @@ public class NotifyExecutor extends WrappedAction implements RequestAction {
 
     @Override
     protected void beforeExecute(ActionContext context) {
-        DocumentEntity document = ((NotifyExecutorActionContext) context).getData();
+        DocumentEntity document = ((DocumentActionContext) context).getData();
+        if (!document.getClass().equals(InternalDocument.class)) {
+            throw new IllegalArgumentException(String.format("Action: \"%s\" allowed only for %s", this.getClass(), InternalDocument.class));
+        }
         LOGGER.info("Before Execute completed");
     }
 
@@ -54,30 +51,7 @@ public class NotifyExecutor extends WrappedAction implements RequestAction {
     }
 
     @Override
-    public NotifyExecutorActionContext getActionContext(RequestParameter actionParam) {
-        return new NotifyExecutorActionContext(actionParam);
-    }
-
-    class NotifyExecutorActionContext implements ActionContext<DocumentEntity> {
-        private DocumentEntity documentEntity;
-
-        public NotifyExecutorActionContext(RequestParameter actionParam) {
-            String type = (String) new TypeParameterDecorator(actionParam).getData();
-            DocumentEntityService entityService = documentService.getServiceByDocumentType(type);
-            if (entityService != null) {
-                DocumentEntity document = entityService.deserialize((Map<String, Serializable>) new DocumentParameterDecorator(actionParam).getData());
-                this.documentEntity = (DocumentEntity) entityService.findById(document.getId()).orElse(null);
-                if (this.documentEntity == null) {
-                    throw new IllegalArgumentException(String.format("Document with type: \"%s\" id: %s not exist in repository", type, document.getId()));
-                }
-            } else {
-                throw new IllegalArgumentException(String.format("Type %s has no assigned entity service", type));
-            }
-        }
-
-        @Override
-        public DocumentEntity getData() {
-            return documentEntity;
-        }
+    public DocumentActionContext getActionContext(RequestParameter actionParam) {
+        return new DocumentActionContext(actionParam, documentService);
     }
 }

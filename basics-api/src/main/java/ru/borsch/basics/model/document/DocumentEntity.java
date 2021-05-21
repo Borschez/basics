@@ -1,12 +1,16 @@
 package ru.borsch.basics.model.document;
 
+import net.bytebuddy.implementation.bind.annotation.IgnoreForBinding;
+import org.springframework.data.annotation.ReadOnlyProperty;
 import ru.borsch.basics.model.data.VersionableEntity;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public class DocumentEntity extends VersionableEntity {
+public abstract class DocumentEntity extends VersionableEntity {
+
+    @ReadOnlyProperty
     @Column(length = 256)
     private String state;
 
@@ -39,4 +43,6 @@ public class DocumentEntity extends VersionableEntity {
     public void setName(String name) {
         this.name = name;
     }
+
+    public abstract String getDocumentTypeCode();
 }

@@ -8,8 +8,9 @@ import org.springframework.stereotype.Component;
 import ru.borsch.basics.action.NotifyExecutor;
 import ru.borsch.basics.repository.action.ActionRepository;
 import ru.borsch.basics.service.document.DocumentService;
-import ru.borsch.basics.service.document.IncomingDocumentService;
-import ru.borsch.basics.service.document.InternalDocumentService;
+import ru.borsch.basics.service.document.DocumentStateService;
+import ru.borsch.basics.service.document.IncomingDocumentEntityService;
+import ru.borsch.basics.service.document.InternalDocumentEntityService;
 
 import javax.annotation.PostConstruct;
 
@@ -18,10 +19,16 @@ public class InitializationBean {
     private static final Logger LOGGER = LoggerFactory.getLogger(InitializationBean.class);
 
     private DocumentService documentService;
-    private IncomingDocumentService incomingDocumentService;
-    private InternalDocumentService internalDocumentService;
+    private IncomingDocumentEntityService incomingDocumentEntityService;
+    private InternalDocumentEntityService internalDocumentEntityService;
     private ActionRepository actionRepository;
     private NotifyExecutor notifyExecutor;
+    private DocumentStateService documentStateService;
+
+    @Autowired
+    public void setDocumentStateService(DocumentStateService documentStateService) {
+        this.documentStateService = documentStateService;
+    }
 
     @Autowired
     public void setNotifyExecutor(NotifyExecutor notifyExecutor) {
@@ -39,19 +46,19 @@ public class InitializationBean {
     }
 
     @Autowired
-    public void setIncomingDocumentService(IncomingDocumentService incomingDocumentService) {
-        this.incomingDocumentService = incomingDocumentService;
+    public void setIncomingDocumentEntityService(IncomingDocumentEntityService incomingDocumentEntityService) {
+        this.incomingDocumentEntityService = incomingDocumentEntityService;
     }
 
     @Autowired
-    public void setInternalDocumentService(InternalDocumentService internalDocumentService) {
-        this.internalDocumentService = internalDocumentService;
+    public void setInternalDocumentEntityService(InternalDocumentEntityService internalDocumentEntityService) {
+        this.internalDocumentEntityService = internalDocumentEntityService;
     }
 
     @PostConstruct
     public void postConstruct() {
-        documentService.registerService(incomingDocumentService);
-        documentService.registerService(internalDocumentService);
+        documentService.registerService(incomingDocumentEntityService);
+        documentService.registerService(internalDocumentEntityService);
 
         /* Actions */
         actionRepository.save(notifyExecutor);

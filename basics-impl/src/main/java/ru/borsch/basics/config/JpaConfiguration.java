@@ -21,7 +21,6 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -31,7 +30,7 @@ import java.util.Properties;
         entityManagerFactoryRef = "entityManagerFactory",
         transactionManagerRef = "transactionManager")
 @EnableTransactionManagement
-@ComponentScan(basePackages = {"ru.borsch.basics.service","ru.borsch.basics.repository","ru.borsch.basics.action"})
+@ComponentScan(basePackages = {"ru.borsch.basics.service","ru.borsch.basics.repository","ru.borsch.basics.action","ru.borsch.basics.document.state"})
 public class JpaConfiguration {
 
     private Environment environment;

@@ -1,5 +1,7 @@
 package ru.borsch.basics.model.document;
 
+import ru.borsch.basics.service.document.DocumentService;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
@@ -15,5 +17,10 @@ public class InternalDocument extends DocumentEntity {
 
     public void setExecutor(String executor) {
         this.executor = executor;
+    }
+
+    @Override
+    public String getDocumentTypeCode() {
+        return DocumentService.INTERNAL_TYPE_CODE;
     }
 }
