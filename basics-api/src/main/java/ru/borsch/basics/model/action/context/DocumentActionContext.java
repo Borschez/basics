@@ -16,7 +16,7 @@ public class DocumentActionContext implements ActionContext<DocumentEntity> {
 
     public DocumentActionContext(RequestParameter actionParam, DocumentService documentService) {
         String type = (String) new TypeParameterProxy(actionParam).getData();
-        DocumentEntityService entityService = documentService.getServiceByDocumentType(type);
+        DocumentEntityService entityService = documentService.getEntityServiceByDocumentType(type);
         if (entityService != null) {
             DocumentEntity document = entityService.deserialize((Map<String, Serializable>) new DocumentParameterProxy(actionParam).getData());
             this.documentEntity = (DocumentEntity) entityService.findById(document.getId()).orElse(null);

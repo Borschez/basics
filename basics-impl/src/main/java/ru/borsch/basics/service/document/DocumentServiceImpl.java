@@ -54,7 +54,7 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public DocumentEntityService getServiceByDocumentType(String documentType) {
+    public DocumentEntityService getEntityServiceByDocumentType(String documentType) {
         return documentType != null ? registeredService.stream().filter(service -> documentType.equals(service.getDocumentTypeCode()))
                 .findFirst().orElse(null) : null;
     }
@@ -68,7 +68,7 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public DocumentEntity deserialize(Map<String, Serializable> dataMap, String typeCode) {
-        DocumentEntityService entityService = this.getServiceByDocumentType(typeCode);
+        DocumentEntityService entityService = this.getEntityServiceByDocumentType(typeCode);
 
         return entityService != null ? entityService.deserialize(dataMap) : null;
     }

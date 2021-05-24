@@ -15,7 +15,7 @@ public interface DocumentService {
 
     void registerService(DocumentEntityService documentEntityService);
 
-    DocumentEntityService getServiceByDocumentType(String documentType);
+    DocumentEntityService getEntityServiceByDocumentType(String documentType);
     DocumentEntityService getServiceByDocumentEntity(DocumentEntity documentEntity);
 
     DocumentEntity deserialize(Map<String, Serializable> dataMap, String typeCode);

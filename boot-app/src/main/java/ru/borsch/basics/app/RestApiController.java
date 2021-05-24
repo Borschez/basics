@@ -77,7 +77,7 @@ public class RestApiController {
     public ResponseEntity<DocumentEntity> getDocumentsByType(@PathVariable("type") String type,
                                                              @PageableDefault(value = 10, page = 0) Pageable pageable) {
         LOGGER.info("Fetching Documents by Type {}", type);
-        DocumentEntityService entityService = documentService.getServiceByDocumentType(type);
+        DocumentEntityService entityService = documentService.getEntityServiceByDocumentType(type);
         if (entityService != null) {
             return new ResponseEntity(entityService.findAll(pageable).getContent(), HttpStatus.OK);
         }
